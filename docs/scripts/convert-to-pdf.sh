@@ -70,11 +70,17 @@ google-chrome --headless=new \
     --allow-file-access-from-files \
     --no-sandbox \
     --disable-dev-shm-usage \
+    --disable-dbus \
+    --disable-features=VizDisplayCompositor \
+    --disable-background-timer-throttling \
+    --disable-backgrounding-occluded-windows \
+    --disable-renderer-backgrounding \
+    --disable-ipc-flooding-protection \
     --print-to-pdf="$PDF_TEMP" \
     --print-to-pdf-no-header \
     --run-all-compositor-stages-before-draw \
     --virtual-time-budget=10000 \
-    "$FILE_URL"
+    "$FILE_URL" 2>/dev/null
 
 # Check if PDF was created
 if [ ! -f "$PDF_TEMP" ]; then
