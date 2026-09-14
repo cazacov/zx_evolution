@@ -6,14 +6,50 @@ export LC_ALL=C.UTF-8
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORK_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 CONFIG_FILE="${WORK_DIR}/documents.json"
-cd "$WORK_DIR"
 
+mode="changed"
+output_list=""
+declare -a changed_markdown=()
+
+usage() {
+    echo "Usage: $0 [--all | --changed-markdown <path> ...] [--output-list <file>]"
+}
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --all)
+            mode="all"
+            ;;
+        --changed-markdown)
+            [ "$#" -ge 2 ] || { usage; exit 2; }
+            changed_markdown+=("$2")
+            shift
+            ;;
+        --output-list)
+            [ "$#" -ge 2 ] || { usage; exit 2; }
+            output_list="$2"
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            exit 2
+            ;;
+    esac
+    shift
+done
+
+cd "$WORK_DIR"
 for command in pandoc google-chrome python3; do
     command -v "$command" >/dev/null 2>&1 || { echo "Error: command not found: $command"; exit 1; }
 done
 [ -f "$CONFIG_FILE" ] || { echo "Error: manifest not found: $CONFIG_FILE"; exit 1; }
 [ -f "templates/github-markdown.min.css" ] || { echo "Error: CSS file not found"; exit 1; }
 [ -f "templates/github-template.html" ] || { echo "Error: HTML template not found"; exit 1; }
+if [ -n "$output_list" ]; then : > "$output_list"; fi
 
 convert_document() {
     local id="$1" markdown="$2" pdf="$3" title="$4"
@@ -33,10 +69,24 @@ convert_document() {
     [ -f "$pdf_temp" ] || { echo "Error: PDF was not created for $markdown"; exit 1; }
     mv -f "$pdf_temp" "$pdf"
     rm -f "$html_temp" "$html"
+    [ -z "$output_list" ] || printf '%s\n' "$pdf" >> "$output_list"
 }
 
+should_convert() {
+    local markdown="$1" changed
+    [ "$mode" = "all" ] && return 0
+    for changed in "${changed_markdown[@]}"; do
+        [ "$markdown" = "$changed" ] && return 0
+    done
+    return 1
+}
+
+generated=0
 while IFS=$'\t' read -r id markdown pdf title; do
-    convert_document "$id" "$markdown" "$pdf" "$title"
+    if should_convert "$markdown"; then
+        convert_document "$id" "$markdown" "$pdf" "$title"
+        generated=$((generated + 1))
+    fi
 done < <(python3 - "$CONFIG_FILE" <<'PY'
 import json, sys
 with open(sys.argv[1], encoding='utf-8') as file:
@@ -45,3 +95,7 @@ with open(sys.argv[1], encoding='utf-8') as file:
             print('\t'.join(str(document[key]) for key in ('id', 'markdown', 'pdf', 'title')))
 PY
 )
+
+if [ "$generated" -eq 0 ]; then
+    echo "No registered Markdown source changed; no PDF generated."
+fi

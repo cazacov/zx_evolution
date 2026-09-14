@@ -1,43 +1,50 @@
 # Automated Markdown to PDF Conversion
 
-This repository includes automated conversion of markdown files to PDF using GitHub Actions.
+GitHub Actions converts Markdown sources in `../documents.json` to PDF.
 
-## How it works
+## Selective generation
 
-1. **Trigger**: The GitHub Action is triggered when any `.md` file in the `docs/` folder is changed
-2. **Conversion**: Uses Pandoc to convert markdown to HTML, then Chrome headless to generate PDF
-3. **Output**: Updates the corresponding PDF file and commits it back to the repository
+For `push` and `pull_request`, the workflow compares the relevant commits, finds changed `docs/*.md` files, and generates PDFs only for matching manifest entries with `pdfEnabled: true`. Changing a README or another Markdown file absent from the manifest does not generate a PDF.
+
+Only the PDFs generated in that run are staged and committed. A manual workflow dispatch generates all enabled documents by default.
 
 ## Files involved
 
-- `.github/workflows/markdown-to-pdf.yml` - GitHub Action workflow
-- `docs/scripts-ci/convert-to-pdf.sh` - Linux conversion script
-- `docs/templates/github-template.html` - HTML template for PDF generation
-- `docs/templates/github-markdown.min.css` - CSS styles for the PDF
-- `docs/templates/github-markdown-overrides.css` - Additional CSS overrides
+- `.github/workflows/markdown-to-pdf.yml` — GitHub Actions workflow.
+- `docs/scripts-ci/convert-to-pdf.sh` — Linux conversion script.
+- `docs/documents.json` — source Markdown/PDF mapping.
+- `docs/templates/github-template.html` — HTML template.
+- `docs/templates/github-markdown.min.css` — GitHub-like CSS.
 
 ## Current automation
 
-The workflow processes every document with `pdfEnabled: true` in [`../documents.json`](../documents.json):
-- `Описание сервис-прошивки ''EVO Reset Service''.md` → `Описание сервис-прошивки ''EVO Reset Service''.pdf`
+The workflow has these enabled mappings:
+
+- `Описание сервис-прошивки ''EVO Reset Service''.md` → `Описание сервис-прошивки ''EVO Reset Service''.pdf`
 - `ZXEvo_firmware_update.md` → `ZXEvo_firmware_update.pdf`
 - `supported_monitors.md` → `supported_monitors.pdf`
 
-## Manual execution
+## Manual execution on Linux/WSL
 
-To run the conversion manually on Linux/WSL:
+Generate all enabled PDFs:
 
 ```bash
 cd docs
 chmod +x scripts-ci/convert-to-pdf.sh
-./scripts-ci/convert-to-pdf.sh
+./scripts-ci/convert-to-pdf.sh --all
 ```
+
+Generate one document after its Markdown changed:
+
+```bash
+./scripts-ci/convert-to-pdf.sh --changed-markdown supported_monitors.md
+```
+
+Use `--output-list <file>` when another script needs the list of PDFs created during the run.
 
 ## Requirements
 
-- Pandoc (for markdown to HTML conversion)
-- Google Chrome/Chromium (for HTML to PDF conversion)
-- Python 3 (for reading `documents.json`)
-- Git (for committing changes)
-
-The GitHub Action automatically installs these dependencies on the Ubuntu runner.
+- Pandoc
+- Google Chrome/Chromium
+- Python 3
+- Git (only for the workflow commit step)

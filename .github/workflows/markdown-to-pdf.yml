@@ -7,7 +7,8 @@ on:
   pull_request:
     paths:
       - 'docs/**/*.md'
-  workflow_dispatch:
+  workflow_dispatch: {}
+
 
 permissions:
   contents: write
@@ -15,30 +16,76 @@ permissions:
 jobs:
   convert-markdown-to-pdf:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
-      
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y pandoc google-chrome-stable
-        
-    - name: Convert markdown to PDF
+
+    - name: Determine changed Markdown files
+      id: changes
+      shell: bash
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        BEFORE_SHA: ${{ github.event.before }}
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        HEAD_SHA: ${{ github.sha }}
+      run: |
+        changed_file="$RUNNER_TEMP/changed-markdown-files.txt"
+        : > "$changed_file"
+
+        if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+          echo "mode=all" >> "$GITHUB_OUTPUT"
+        else
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- docs > "$changed_file"
+          elif [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+            git diff-tree --no-commit-id --name-only -r "$HEAD_SHA" -- docs > "$changed_file"
+          else
+            git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" -- docs > "$changed_file"
+          fi
+          sed -i -n 's#^docs/##p' "$changed_file"
+          grep -E '\.md$' "$changed_file" > "${changed_file}.filtered" || true
+          mv "${changed_file}.filtered" "$changed_file"
+          echo "mode=changed" >> "$GITHUB_OUTPUT"
+        fi
+        echo "file=$changed_file" >> "$GITHUB_OUTPUT"
+
+    - name: Convert changed Markdown to PDF
+      env:
+        MODE: ${{ steps.changes.outputs.mode }}
+        CHANGED_FILES: ${{ steps.changes.outputs.file }}
+        GENERATED_PDFS: ${{ runner.temp }}/generated-pdfs.txt
       run: |
         chmod +x docs/scripts-ci/convert-to-pdf.sh
+        args=(--output-list "$GENERATED_PDFS")
+        if [ "$MODE" = "all" ]; then
+          args+=(--all)
+        else
+          while IFS= read -r markdown; do
+            [ -n "$markdown" ] && args+=(--changed-markdown "$markdown")
+          done < "$CHANGED_FILES"
+        fi
         cd docs
-        ./scripts-ci/convert-to-pdf.sh
-        
-    - name: Commit and push PDF changes
+        ./scripts-ci/convert-to-pdf.sh "${args[@]}"
+
+    - name: Commit and push generated PDF files
       if: github.event_name == 'push'
+      env:
+        GENERATED_PDFS: ${{ runner.temp }}/generated-pdfs.txt
       run: |
+        [ -s "$GENERATED_PDFS" ] || exit 0
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add docs/*.pdf
-        git diff --staged --quiet || git commit -m "Auto-update PDF files from markdown changes"
+        while IFS= read -r pdf; do
+          [ -n "$pdf" ] && git add -- "docs/$pdf"
+        done < "$GENERATED_PDFS"
+        git diff --staged --quiet || git commit -m "Auto-update PDFs from changed Markdown"
         git push
