@@ -1,0 +1,25 @@
+{
+  "svnRepositoryUrl": "svn://zxevo.ru/pentevo",
+  "documents": [
+    {
+      "id": "evo-reset-service",
+      "title": "EVO Reset Service",
+      "svnPath": "/docs/Описание сервис-прошивки ''EVO Reset Service''.odt",
+      "markdown": "Описание сервис-прошивки ''EVO Reset Service''.md",
+      "pdf": "Описание сервис-прошивки ''EVO Reset Service''.pdf",
+      "revisionFile": "Описание сервис-прошивки ''EVO Reset Service''-revision.txt",
+      "mediaDirectory": "media/evo-reset-service",
+      "pdfEnabled": true
+    },
+    {
+      "id": "zxevo-firmware-update",
+      "title": "ZX Evolution firmware update",
+      "svnPath": "/docs/ZXEvo_firmware_update.odt",
+      "markdown": "ZXEvo_firmware_update.md",
+      "pdf": "ZXEvo_firmware_update.pdf",
+      "revisionFile": "ZXEvo_firmware_update-revision.txt",
+      "mediaDirectory": "media/zxevo-firmware-update",
+      "pdfEnabled": true
+    }
+  ]
+}

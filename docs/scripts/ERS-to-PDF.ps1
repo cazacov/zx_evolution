@@ -4,7 +4,8 @@ $utf8 = [System.Text.Encoding]::UTF8
 $OutputEncoding = $utf8
 [Console]::OutputEncoding = $utf8
 
-$workdir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$scriptDirectory = Split-Path -Parent $MyInvocation.MyCommand.Path
+$workdir = Split-Path -Parent $scriptDirectory
 Set-Location $workdir
 
 $md = "Описание сервис-прошивки ''EVO Reset Service''.md"

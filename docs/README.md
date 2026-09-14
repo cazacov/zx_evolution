@@ -1,58 +1,62 @@
-# Конвертация Markdown в PDF (в стиле GitHub)
+# Документация ZX Evolution
 
-Создаёт PDF и HTML максимально похожие на рендер GitHub Markdown, с корректной кириллицей и встроенными изображениями.
+Эта папка хранит Markdown-копии оригинальной документации ZX Evolution, вычитанные для удобного просмотра на GitHub. Оригинальные ODT являются источником содержания; Markdown адаптирован для навигации, ссылок и отображения иллюстраций в репозитории.
 
-## Предварительные требования
+Исходная документация поддерживается в Subversion-репозитории [`svn://zxevo.ru/pentevo`](svn://zxevo.ru/pentevo).
 
-1) Pandoc (v3.x)
-- Установка: https://pandoc.org/installing.html
-- Проверка:
+## Документы
+
+- [Описание сервис-прошивки «EVO Reset Service»](<Описание сервис-прошивки ''EVO Reset Service''.md>) 
+  - [PDF](<Описание сервис-прошивки ''EVO Reset Service''.pdf>)
+  - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2F%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%BF%D1%80%D0%BE%D1%88%D0%B8%D0%B2%D0%BA%D0%B8%20%27%27EVO%20Reset%20Service%27%27.odt)
+- [Обновление прошивок ZX Evolution](ZXEvo_firmware_update.md) 
+  - [PDF](ZXEvo_firmware_update.pdf)
+
+## Реестр документов
+
+[documents.json](documents.json) — единый список ODT-источников из SVN, соответствующих Markdown/PDF-файлов, каталогов иллюстраций и файлов контрольных ревизий. Добавляйте новые документы в этот реестр перед включением их в автоматизацию.
+
+Каждый документ имеет собственный файл `…-revision.txt` с последней SVN-ревизией, уже представленной в вычитанном Markdown. Этот файл следует коммитить вместе с соответствующими правками документации.
+
+## Скрипты
+
+- `scripts/` — PowerShell-скрипты для ручного запуска в Windows.
+- `scripts-ci/` — shell-скрипты для GitHub Actions и Linux/WSL. Workflow [`.github/workflows/markdown-to-pdf.yml`](../.github/workflows/markdown-to-pdf.yml) вызывает `scripts-ci/convert-to-pdf.sh`.
+
+### Ручное обновление Markdown по ODT
+
+`scripts/compare-odt-revisions.ps1` читает `documents.json`, получает две ревизии выбранного ODT из SVN, преобразует их в Markdown через Pandoc и показывает diff. Скрипт не перезаписывает вычитанный Markdown: найденные смысловые изменения переносятся вручную.
+
+Без параметров появляется меню выбора документа:
+
 ```powershell
-pandoc --version
+.\scripts\compare-odt-revisions.ps1
 ```
 
-2) Google Chrome (для headless-экспорта в PDF)
-- Установка: https://www.google.com/chrome/
-- Проверка:
+Для неинтерактивного выбора и показа изменений отдельными шагами:
+
 ```powershell
-& "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
+.\scripts\compare-odt-revisions.ps1 -DocumentId evo-reset-service -EachRevision -KeepFiles
 ```
 
-3) PowerShell (есть в Windows по умолчанию)
+После ручного переноса правок контрольную точку нужно обновить явно:
 
-## Файлы в папке
-
-- Исходный Markdown: `Описание сервис-прошивки ''EVO Reset Service''.md`
-- Изображения: `media\...`
-- GitHub CSS: `templates\github-markdown.min.css`
-- Локальные правки CSS: `templates\github-markdown-overrides.css`
-- HTML шаблон: `templates\github-template.html`
-- Генератор: `ERS-to-PDF.ps1`
-- Результаты: `Описание сервис-прошивки ''EVO Reset Service''.html`, `Описание сервис-прошивки ''EVO Reset Service''.pdf`
-
-## Как пользоваться (одна команда)
-
-Запустите скрипт из этой папки:
 ```powershell
-.\ERS-to-PDF.ps1
+.\scripts\compare-odt-revisions.ps1 -DocumentId evo-reset-service -ToRevision <номер-ревизии> -MarkProcessed
 ```
 
-Скрипт создаёт/обновляет оба файла:
-- `Описание сервис-прошивки ''EVO Reset Service''.html`
-- `Описание сервис-прошивки ''EVO Reset Service''.pdf`
+Для работы скрипта требуются `svn`, Pandoc и Git. PowerShell-скрипт сохранён в UTF-8 с BOM и совместим с Windows PowerShell 5.1 и PowerShell 7.
 
-## Настройка размера и плотности текста
+### Ручное создание PDF
 
-Основные настройки находятся в двух файлах:
-- `templates\github-template.html` — базовый размер шрифта (`font-size: 14px`)
-- `templates\github-markdown-overrides.css` — межстрочный интервал и отступы
+`scripts/ERS-to-PDF.ps1` вручную создаёт HTML и PDF только для EVO Reset Service с помощью Pandoc, шаблона GitHub Markdown и Chrome в headless-режиме:
 
-Рекомендации:
-- Чтобы сделать текст крупнее/мельче, меняйте `font-size`.
-- Чтобы уменьшить количество страниц, чаще всего помогает уменьшить `line-height` и вертикальные отступы.
+```powershell
+.\scripts\ERS-to-PDF.ps1
+```
 
-## Примечания и устранение проблем
+Нужны Pandoc и Google Chrome; PDF перед запуском не должен быть открыт в программе просмотра. Подробности: [scripts/README.md](scripts/README.md).
 
-- Если Chrome пишет, что файл занят, закройте просмотрщик PDF и запустите скрипт снова.
-- Если картинки не попали в PDF, убедитесь, что пути в Markdown указывают на `media/...` и перезапустите скрипт.
-- Если шрифты с кириллицей выглядят неправильно, установите системный шрифт с поддержкой кириллицы (например, Arial или Noto Sans) и повторите генерацию.
+### Автоматическое создание PDF
+
+`scripts-ci/convert-to-pdf.sh` читает `documents.json` и преобразует все документы с `pdfEnabled: true` на Linux runner в GitHub Actions. `scripts-ci/test-setup.sh` проверяет локальную Linux/WSL-среду перед его запуском. Подробности: [scripts-ci/README.md](scripts-ci/README.md).

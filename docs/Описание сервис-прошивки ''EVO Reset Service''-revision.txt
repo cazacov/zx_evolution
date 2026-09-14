@@ -1,0 +1,2 @@
+# Last SVN revision whose EVO Reset Service ODT changes were manually merged into the curated Markdown.
+1324

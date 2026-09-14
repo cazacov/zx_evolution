@@ -30,9 +30,9 @@ jobs:
         
     - name: Convert markdown to PDF
       run: |
-        chmod +x docs/scripts/convert-to-pdf.sh
+        chmod +x docs/scripts-ci/convert-to-pdf.sh
         cd docs
-        ./scripts/convert-to-pdf.sh
+        ./scripts-ci/convert-to-pdf.sh
         
     - name: Commit and push PDF changes
       if: github.event_name == 'push'

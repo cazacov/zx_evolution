@@ -6,7 +6,7 @@
 echo "=== Testing Markdown to PDF Conversion Setup ==="
 
 # Check if we're in the right directory
-if [ ! -d "templates" ] || [ ! -f "scripts/convert-to-pdf.sh" ]; then
+if [ ! -d "templates" ] || [ ! -f "scripts-ci/convert-to-pdf.sh" ] || [ ! -f "documents.json" ]; then
     echo "❌ Error: Please run this script from the docs/ directory"
     exit 1
 fi
@@ -18,7 +18,8 @@ REQUIRED_FILES=(
     "Описание сервис-прошивки ''EVO Reset Service''.md"
     "templates/github-template.html"
     "templates/github-markdown.min.css"
-    "scripts/convert-to-pdf.sh"
+    "scripts-ci/convert-to-pdf.sh"
+    "documents.json"
 )
 
 for file in "${REQUIRED_FILES[@]}"; do
@@ -31,7 +32,7 @@ for file in "${REQUIRED_FILES[@]}"; do
 done
 
 # Check for required commands
-REQUIRED_COMMANDS=("pandoc" "google-chrome")
+REQUIRED_COMMANDS=("pandoc" "google-chrome" "python3")
 MISSING_COMMANDS=()
 
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
@@ -54,6 +55,9 @@ if [ ${#MISSING_COMMANDS[@]} -ne 0 ]; then
             "google-chrome")
                 echo "  - google-chrome: sudo apt-get install google-chrome-stable"
                 ;;
+            "python3")
+                echo "  - python3: sudo apt-get install python3"
+                ;;
         esac
     done
     exit 1
@@ -63,5 +67,5 @@ echo ""
 echo "✅ All requirements satisfied!"
 echo ""
 echo "You can now run the conversion script:"
-echo "  chmod +x scripts/convert-to-pdf.sh"
-echo "  ./scripts/convert-to-pdf.sh"
+echo "  chmod +x scripts-ci/convert-to-pdf.sh"
+echo "  ./scripts-ci/convert-to-pdf.sh"
