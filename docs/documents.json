@@ -20,6 +20,16 @@
       "revisionFile": "ZXEvo_firmware_update-revision.txt",
       "mediaDirectory": "media/zxevo-firmware-update",
       "pdfEnabled": true
+    },
+    {
+      "id": "supported-monitors",
+      "title": "Supported monitors",
+      "svnPath": "/docs/supported_monitors.odt",
+      "markdown": "supported_monitors.md",
+      "pdf": "supported_monitors.pdf",
+      "revisionFile": "supported_monitors-revision.txt",
+      "mediaDirectory": "media/supported-monitors",
+      "pdfEnabled": true
     }
   ]
 }

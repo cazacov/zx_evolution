@@ -2,15 +2,20 @@
 
 Эта папка хранит Markdown-копии оригинальной документации ZX Evolution, вычитанные для удобного просмотра на GitHub. Оригинальные ODT являются источником содержания; Markdown адаптирован для навигации, ссылок и отображения иллюстраций в репозитории.
 
-Исходная документация поддерживается в Subversion-репозитории [`svn://zxevo.ru/pentevo`](svn://zxevo.ru/pentevo).
+Исходная документация находится в Subversion-репозитории [`svn://zxevo.ru/pentevo`](svn://zxevo.ru/pentevo).
 
-## Документы
+## Документы в формате MD и PDF
 
 - [Описание сервис-прошивки «EVO Reset Service»](<Описание сервис-прошивки ''EVO Reset Service''.md>) 
   - [PDF](<Описание сервис-прошивки ''EVO Reset Service''.pdf>)
   - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2F%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%BF%D1%80%D0%BE%D1%88%D0%B8%D0%B2%D0%BA%D0%B8%20%27%27EVO%20Reset%20Service%27%27.odt)
 - [Обновление прошивок ZX Evolution](ZXEvo_firmware_update.md) 
   - [PDF](ZXEvo_firmware_update.pdf)
+  - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FZXEvo_firmware_update.odt)
+- [Поддерживаемые мониторы](supported_monitors.md)
+  - [PDF](supported_monitors.pdf)
+  - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2Fsupported_monitors.odt)
+
 
 ## Реестр документов
 

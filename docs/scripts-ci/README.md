@@ -21,6 +21,7 @@ This repository includes automated conversion of markdown files to PDF using Git
 The workflow processes every document with `pdfEnabled: true` in [`../documents.json`](../documents.json):
 - `Описание сервис-прошивки ''EVO Reset Service''.md` → `Описание сервис-прошивки ''EVO Reset Service''.pdf`
 - `ZXEvo_firmware_update.md` → `ZXEvo_firmware_update.pdf`
+- `supported_monitors.md` → `supported_monitors.pdf`
 
 ## Manual execution
 
