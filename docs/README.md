@@ -17,6 +17,11 @@
   - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2Fsupported_monitors.odt)
 
 
+## Для первичной вычитки
+
+- [Базовая конфигурация ZX Evolution](zxevo_base_configuration.md) — первичная конвертация из ODT, ещё не вычитана.
+  - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2Fzxevo_base_configuration.odt)
+
 ## Реестр документов
 
 [documents.json](documents.json) — единый список ODT-источников из SVN, соответствующих Markdown/PDF-файлов, каталогов иллюстраций и файлов контрольных ревизий. Добавляйте новые документы в этот реестр перед включением их в автоматизацию.
