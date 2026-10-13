@@ -1,2 +1,0 @@
-# Last SVN revision whose supported monitors ODT content is represented in the curated Markdown.
-1298

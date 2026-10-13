@@ -1,6 +1,6 @@
 # Automated Markdown to PDF Conversion
 
-GitHub Actions converts Markdown sources in `../documents.json` to PDF.
+GitHub Actions converts Markdown sources in `../documents.json` to PDF in docs/pdf_generated/. The output directory is created automatically.
 
 ## Selective generation
 
@@ -20,9 +20,10 @@ Only the PDFs generated in that run are staged and committed. A manual workflow 
 
 The workflow has these enabled mappings:
 
-- `Описание сервис-прошивки ''EVO Reset Service''.md` → `Описание сервис-прошивки ''EVO Reset Service''.pdf`
-- `ZXEvo_firmware_update.md` → `ZXEvo_firmware_update.pdf`
-- `supported_monitors.md` → `supported_monitors.pdf`
+- `Описание сервис-прошивки ''EVO Reset Service''.md` → `pdf_generated/Описание сервис-прошивки ''EVO Reset Service''.pdf`
+- `ZXEvo_firmware_update.md` → `pdf_generated/ZXEvo_firmware_update.pdf`
+- `supported_monitors.md` → `pdf_generated/supported_monitors.pdf`
+- `zxevo_user_manual.md` → `pdf_generated/zxevo_user_manual.pdf`
 
 ## Manual execution on Linux/WSL
 

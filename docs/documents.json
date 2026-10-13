@@ -6,8 +6,8 @@
       "title": "EVO Reset Service",
       "svnPath": "/docs/Описание сервис-прошивки ''EVO Reset Service''.odt",
       "markdown": "Описание сервис-прошивки ''EVO Reset Service''.md",
-      "pdf": "Описание сервис-прошивки ''EVO Reset Service''.pdf",
-      "revisionFile": "Описание сервис-прошивки ''EVO Reset Service''-revision.txt",
+      "pdf": "pdf_generated/Описание сервис-прошивки ''EVO Reset Service''.pdf",
+      "lastProcessedRevision": 1324,
       "mediaDirectory": "media/evo-reset-service",
       "pdfEnabled": true
     },
@@ -16,8 +16,8 @@
       "title": "ZX Evolution firmware update",
       "svnPath": "/docs/ZXEvo_firmware_update.odt",
       "markdown": "ZXEvo_firmware_update.md",
-      "pdf": "ZXEvo_firmware_update.pdf",
-      "revisionFile": "ZXEvo_firmware_update-revision.txt",
+      "pdf": "pdf_generated/ZXEvo_firmware_update.pdf",
+      "lastProcessedRevision": 89,
       "mediaDirectory": "media/zxevo-firmware-update",
       "pdfEnabled": true
     },
@@ -26,9 +26,19 @@
       "title": "Supported monitors",
       "svnPath": "/docs/supported_monitors.odt",
       "markdown": "supported_monitors.md",
-      "pdf": "supported_monitors.pdf",
-      "revisionFile": "supported_monitors-revision.txt",
+      "pdf": "pdf_generated/supported_monitors.pdf",
+      "lastProcessedRevision": 1298,
       "mediaDirectory": "media/supported-monitors",
+      "pdfEnabled": true
+    },
+    {
+      "id": "zxevo-user-manual",
+      "title": "ZX Evolution revision C: руководство пользователя",
+      "svnPath": "/docs/revC/zxevo_user_manual.odt",
+      "markdown": "zxevo_user_manual.md",
+      "pdf": "pdf_generated/zxevo_user_manual.pdf",
+      "lastProcessedRevision": 853,
+      "mediaDirectory": "media/zxevo-user-manual",
       "pdfEnabled": true
     }
   ]

@@ -6,16 +6,19 @@
 
 ## Документы в формате MD и PDF
 
+- [Руководство пользователя ZX Evolution revision C](zxevo_user_manual.md)
+  - [PDF](pdf_generated/zxevo_user_manual.pdf)
+  - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FrevC%2Fzxevo_user_manual.odt)
+
 - [Описание сервис-прошивки «EVO Reset Service»](<Описание сервис-прошивки ''EVO Reset Service''.md>) 
-  - [PDF](<Описание сервис-прошивки ''EVO Reset Service''.pdf>)
+  - [PDF](<pdf_generated/Описание сервис-прошивки ''EVO Reset Service''.pdf>)
   - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2F%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%BF%D1%80%D0%BE%D1%88%D0%B8%D0%B2%D0%BA%D0%B8%20%27%27EVO%20Reset%20Service%27%27.odt)
 - [Обновление прошивок ZX Evolution](ZXEvo_firmware_update.md) 
-  - [PDF](ZXEvo_firmware_update.pdf)
+  - [PDF](pdf_generated/ZXEvo_firmware_update.pdf)
   - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FZXEvo_firmware_update.odt)
 - [Поддерживаемые мониторы](supported_monitors.md)
-  - [PDF](supported_monitors.pdf)
+  - [PDF](pdf_generated/supported_monitors.pdf)
   - [Исходник ODT в SVN](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2Fsupported_monitors.odt)
-
 
 ## Для первичной вычитки
 
@@ -24,9 +27,9 @@
 
 ## Реестр документов
 
-[documents.json](documents.json) — единый список ODT-источников из SVN, соответствующих Markdown/PDF-файлов, каталогов иллюстраций и файлов контрольных ревизий. Добавляйте новые документы в этот реестр перед включением их в автоматизацию.
+[documents.json](documents.json) — единый список ODT-источников из SVN, соответствующих Markdown/PDF-файлов, каталогов иллюстраций и последних обработанных SVN-ревизий. Добавляйте новые документы в этот реестр перед включением их в автоматизацию.
 
-Каждый документ имеет собственный файл `…-revision.txt` с последней SVN-ревизией, уже представленной в вычитанном Markdown. Этот файл следует коммитить вместе с соответствующими правками документации.
+Поле `lastProcessedRevision` каждого документа хранит последнюю SVN-ревизию, уже представленную в вычитанном Markdown. Изменения `documents.json` следует коммитить вместе с соответствующими правками документации.
 
 ## Скрипты
 

@@ -56,6 +56,8 @@ convert_document() {
     local html="${pdf%.pdf}.html" html_temp="__print-${id}.html" pdf_temp="__print-${id}.pdf"
     [ -f "$markdown" ] || { echo "Error: Markdown file not found: $markdown"; exit 1; }
 
+    mkdir -p "$(dirname "$pdf")"
+
     echo "Converting $markdown -> $pdf"
     pandoc -f gfm -t html5 --standalone --template="templates/github-template.html" \
         --metadata title="$title" --css="templates/github-markdown.min.css" --embed-resources \

@@ -12,7 +12,8 @@ $md = "Описание сервис-прошивки ''EVO Reset Service''.md"
 $css = "templates\\github-markdown.min.css"
 $template = "templates\\github-template.html"
 $html = "Описание сервис-прошивки ''EVO Reset Service''.html"
-$pdf = "Описание сервис-прошивки ''EVO Reset Service''.pdf"
+$pdfDirectory = Join-Path $workdir "pdf_generated"
+$pdf = Join-Path $pdfDirectory "Описание сервис-прошивки ''EVO Reset Service''.pdf"
 $chrome = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 $userDataDir = Join-Path $env:TEMP "mdpdf-chrome-profile"
 $htmlTemp = Join-Path $workdir "__print-source.html"
@@ -33,6 +34,8 @@ if (-not (Test-Path -LiteralPath $chrome)) {
 if (-not (Test-Path -LiteralPath $userDataDir)) {
   New-Item -ItemType Directory -Path $userDataDir | Out-Null
 }
+
+New-Item -ItemType Directory -Path $pdfDirectory -Force | Out-Null
 
 pandoc -f gfm -t html5 --standalone --template $template `
   --metadata title="Описание сервис прошивки EVO Reset Service" `

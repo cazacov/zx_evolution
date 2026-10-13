@@ -3,7 +3,7 @@ param(
     # Identifier from ../documents.json. Without it, an interactive menu is shown.
     [string]$DocumentId,
 
-    # Revision to start from. By default this is read from the selected state file.
+    # Revision to start from. By default this is read from documents.json.
     [Nullable[int]]$FromRevision,
 
     # Revision to finish at. By default this is the newest ODT revision in SVN.
@@ -12,7 +12,7 @@ param(
     # Show a separate Markdown diff for every intervening SVN revision.
     [switch]$EachRevision,
 
-    # Advance the state file after you have manually merged the shown changes.
+    # Advance lastProcessedRevision in documents.json after you have manually merged the shown changes.
     [switch]$MarkProcessed,
 
     # Keep downloaded ODTs, generated Markdown, and extracted pictures for inspection.
@@ -30,7 +30,7 @@ foreach ($command in 'svn', 'pandoc', 'git') {
 }
 if (-not (Test-Path -LiteralPath $configFile)) { throw "Не найден реестр документов: $configFile" }
 
-$config = Get-Content -LiteralPath $configFile -Raw | ConvertFrom-Json
+$config = Get-Content -LiteralPath $configFile -Raw -Encoding UTF8 | ConvertFrom-Json
 $documents = @($config.documents)
 if ($documents.Count -eq 0) { throw 'В реестре нет документов.' }
 
@@ -54,7 +54,6 @@ else {
     }
 }
 
-$stateFile = Join-Path $docsDirectory ([string]$document.revisionFile)
 $pathSegments = @(([string]$document.svnPath).Trim('/') -split '/' | ForEach-Object { [Uri]::EscapeDataString($_) })
 $sourceUrl = ([string]$config.svnRepositoryUrl).TrimEnd('/') + '/' + ($pathSegments -join '/')
 $mediaReference = ([string]$document.mediaDirectory).TrimEnd('/') + '/'
@@ -67,10 +66,12 @@ function Get-LatestRevision {
 }
 
 function Get-ProcessedRevision {
-    if (-not (Test-Path -LiteralPath $stateFile)) { throw "Не найден файл состояния: $stateFile" }
-    $line = Get-Content -LiteralPath $stateFile | Where-Object { $_ -match '^\s*\d+\s*$' } | Select-Object -First 1
-    if ($null -eq $line) { throw "В $stateFile не найден номер SVN-ревизии." }
-    return [int]$line.Trim()
+    [int]$revision = 0
+    $value = $document.lastProcessedRevision
+    if ($null -eq $value -or -not [int]::TryParse([string]$value, [ref]$revision) -or $revision -lt 0) {
+        throw "Некорректная lastProcessedRevision для '$($document.id)' в $configFile."
+    }
+    return $revision
 }
 
 function Convert-OdtToMarkdown([string]$odtFile, [string]$markdownFile, [string]$mediaDirectory) {
@@ -121,14 +122,12 @@ try {
     }
 
     if ($MarkProcessed) {
-        $state = @(
-            "# Last SVN revision whose $($document.title) ODT changes were manually merged into the curated Markdown.",
-            [string]$ToRevision
-        ) -join [Environment]::NewLine
-        [IO.File]::WriteAllText($stateFile, "$state$([Environment]::NewLine)", [Text.UTF8Encoding]::new($false))
-        Write-Host "`nФайл состояния обновлён: r$ToRevision"
+        $document.lastProcessedRevision = [int]$ToRevision
+        $json = $config | ConvertTo-Json -Depth 20
+        [IO.File]::WriteAllText($configFile, "$json$([Environment]::NewLine)", [Text.UTF8Encoding]::new($false))
+        Write-Host "`nКонтрольная точка в documents.json обновлена: r$ToRevision"
     } else {
-        Write-Host "`nФайл состояния не изменён; текущая контрольная точка: r$storedRevision. После ручного переноса правок повторите команду с -MarkProcessed."
+        Write-Host "`ndocuments.json не изменён; текущая контрольная точка: r$storedRevision. После ручного переноса правок повторите команду с -MarkProcessed."
     }
 } finally {
     if ($KeepFiles) { Write-Host "Промежуточные файлы оставлены в: ${workDir}" }

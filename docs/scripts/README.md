@@ -28,7 +28,7 @@ pandoc --version
 - Локальные правки CSS: `templates\github-markdown-overrides.css`
 - HTML шаблон: `templates\github-template.html`
 - Генератор: `scripts\ERS-to-PDF.ps1`
-- Результаты: `Описание сервис-прошивки ''EVO Reset Service''.html`, `Описание сервис-прошивки ''EVO Reset Service''.pdf`
+- Результаты: `Описание сервис-прошивки ''EVO Reset Service''.html`, `pdf_generated/Описание сервис-прошивки ''EVO Reset Service''.pdf`
 
 ## Как пользоваться (одна команда)
 
@@ -39,7 +39,7 @@ pandoc --version
 
 Скрипт создаёт/обновляет оба файла:
 - `Описание сервис-прошивки ''EVO Reset Service''.html`
-- `Описание сервис-прошивки ''EVO Reset Service''.pdf`
+- `pdf_generated/Описание сервис-прошивки ''EVO Reset Service''.pdf`
 
 ## Настройка размера и плотности текста
 
@@ -61,3 +61,5 @@ pandoc --version
 ## Сравнение ревизий ODT
 
 compare-odt-revisions.ps1 читает [../documents.json](../documents.json) и без параметров предлагает выбрать документ. Для неинтерактивного запуска укажите, например, -DocumentId evo-reset-service.
+
+Последняя обработанная SVN-ревизия хранится в поле `lastProcessedRevision` выбранного документа в `documents.json`. Параметр `-MarkProcessed` обновляет это поле после ручного переноса изменений в Markdown.
