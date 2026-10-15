@@ -1,11 +1,13 @@
 # Версии ZX Evolution
 
 ## Revision A
+Прототип ZX Evolution, платы этой ревизии есть только у разработчиков и в продажу не поступали.
 
 ## Revision B
+Редкая в наше время зелёная плата под mATX/ATX корпус, серийное производство до 2011, затем была заменена на Revision C.
 
 ## Revision C
-Наиболее распротранённая версия ZX Evolution
+Наиболее распротранённая версия ZX Evolution. Красная плата под mini ITX, серийное производство до 2015, затем производство передано [Tetroid](http://tetroid.nedopc.com)
  - [Руководство пользователя](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FrevC%2Fzxevo_user_manual.pdf)
  - [Принципиальная схема](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FrevC%2Fzxevo_sch_revc.pdf)
  - [Руководство по сборке и настройке](http://svn.nedopc.com/filedetails.php?repname=pentevo&path=%2Fdocs%2FrevC%2Fzxevo_solder.pdf)
