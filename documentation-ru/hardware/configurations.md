@@ -39,6 +39,7 @@ ZX Evolution превращается в ZX Spectrum-совместимый ко
 Конфигурация фьюзов при прошивке AVR:
 
 Low byte: `0x3F` High byte: `0x88` Extended: `0xFF` Lock: `0xEF`
+
 <img src="_img/bootloader_fuse_TL866II.png" style="width:5in"/>
 
 ## Файлы конфигурации
